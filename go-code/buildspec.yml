@@ -6,6 +6,6 @@ phases:
 artifacts:
   files:
     - main
-    - scripts
+    - scripts/*
     - appspec.yml
   name: main

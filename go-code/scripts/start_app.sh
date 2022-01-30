@@ -1,2 +1,2 @@
 #!/bin/bash -xe
-/opt/main
+nohup /opt/main > /dev/null 2> /dev/null < /dev/null &
