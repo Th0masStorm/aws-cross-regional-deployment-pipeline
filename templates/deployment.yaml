@@ -150,6 +150,7 @@ Resources:
   CodeDeployDeploymentGroup:
     Type: AWS::CodeDeploy::DeploymentGroup
     Properties:
+      DeploymentGroupName: DummyGoAppGroup
       ApplicationName: !Ref CodeDeployApplication
       AutoScalingGroups:
         - !Ref AutoScalingGroup
