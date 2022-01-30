@@ -84,5 +84,20 @@ Resources:
                 ProjectName: !Ref CodeBuildProject
               InputArtifacts:
                 - Name: SourceCode
-
-
+              OutputArtifacts:
+                - Name: Deployment
+        -
+          Name: Deploy
+          Actions:
+            -
+              Name: Deploy
+              InputArtifacts:
+                - Name: Deployment
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CodeDeploy
+                Version: 1
+              Configuration:
+                ApplicationName: DummyGoApp
+                DeploymentGroupName: DummyGoAppGroup
