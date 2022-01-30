@@ -8,9 +8,6 @@ Resources:
     Properties:
       RepositoryName: "DummyGoApp"
 
-  Bucket:
-    Type: AWS::S3::Bucket
-
   CodeBuildRole:
     Type: AWS::IAM::Role
     Properties:
@@ -50,9 +47,19 @@ Resources:
       # Do the same here:
       # https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-create-service-role-console.html
       RoleArn: !Sub "arn:aws:iam::${AWS::AccountId}:role/AWS-CodePipeline-Service"
-      ArtifactStore:
-        Type: S3
-        Location: !Ref Bucket
+      ArtifactStores:
+        - Region: us-east-1
+          ArtifactStore:
+            Type: S3
+            Location: artifact-store-us-east-1
+        - Region: us-west-1
+          ArtifactStore:
+            Type: S3
+            Location: artifact-store-us-west-1
+        - Region: us-west-2
+          ArtifactStore:
+            Type: S3
+            Location: artifact-store-us-west-2
       Stages:
         -
           Name: PollSCM
@@ -90,7 +97,34 @@ Resources:
           Name: Deploy
           Actions:
             -
-              Name: Deploy
+              Name: USE1
+              Region: us-east-1
+              InputArtifacts:
+                - Name: Deployment
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CodeDeploy
+                Version: 1
+              Configuration:
+                ApplicationName: DummyGoApp
+                DeploymentGroupName: DummyGoAppGroup
+            -
+              Name: USW1
+              Region: us-west-1
+              InputArtifacts:
+                - Name: Deployment
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CodeDeploy
+                Version: 1
+              Configuration:
+                ApplicationName: DummyGoApp
+                DeploymentGroupName: DummyGoAppGroup
+            -
+              Name: USW2
+              Region: us-west-2
               InputArtifacts:
                 - Name: Deployment
               ActionTypeId:
